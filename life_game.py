@@ -25,7 +25,11 @@ def populate(field: list, count: int):
 
 def next_generation(field: list, unlimited_field: bool = False):
     replica = deepcopy(field)
-    count_neighbours = count_unlimited_field_neighbour if unlimited_field else count_limited_field_neighbour
+    count_neighbours = (
+        count_unlimited_field_neighbour
+        if unlimited_field
+        else count_limited_field_neighbour
+    )
     for i in range(size_h):
         for j in range(size_w):
             neighbours = count_neighbours(replica, i, j, size_h, size_w)
@@ -40,13 +44,30 @@ def next_generation(field: list, unlimited_field: bool = False):
         quit()
 
 
-def count_limited_field_neighbour(field: list, i: int, j: int, size_h: int, size_w: int) -> int:
-    return sum([field[i + x][j + y] for x in range(-1, 2) for y in range(-1, 2) if
-                (x != 0 or y != 0) and 0 <= i + x < size_h and 0 <= j + y < size_w])
+def count_limited_field_neighbour(
+    field: list, i: int, j: int, size_h: int, size_w: int
+) -> int:
+    return sum(
+        [
+            field[i + x][j + y]
+            for x in range(-1, 2)
+            for y in range(-1, 2)
+            if (x != 0 or y != 0) and 0 <= i + x < size_h and 0 <= j + y < size_w
+        ]
+    )
 
 
-def count_unlimited_field_neighbour(field: list, i: int, j: int, size_h: int, size_w: int) -> int:
-    return sum([field[(i + x) % size_h][(j + y) % size_w] for x in range(-1, 2) for y in range(-1, 2) if (x != 0 or y != 0)])
+def count_unlimited_field_neighbour(
+    field: list, i: int, j: int, size_h: int, size_w: int
+) -> int:
+    return sum(
+        [
+            field[(i + x) % size_h][(j + y) % size_w]
+            for x in range(-1, 2)
+            for y in range(-1, 2)
+            if (x != 0 or y != 0)
+        ]
+    )
 
 
 def check_life(field: list):
